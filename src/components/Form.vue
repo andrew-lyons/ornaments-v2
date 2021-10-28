@@ -3,41 +3,40 @@
         <div class="inputs-form">
             <div class="inputs-form-row">
                 <div class="inputs-form-row-left">
-                    <h4>First Name</h4>
-                    <input type="text" placeholder="John">
+                    <h4>Option</h4>
+                    
+                    <select v-model="option">
+                        <option value="">--Please choose an option--</option>
+                        <option value="Full Name">Full Name</option>
+                        <option value="Family Name">Family Name</option>
+                        <option value="Anonymous">Anonymous</option>
+                    </select>
                 </div>
 
                 <div class="inputs-form-row-right">
-                    <h4>Last Name</h4>
-                    <input type="text" placeholder="Doe">
+                    <h4>Name</h4>
+                    <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
                 </div>
             </div>
 
             <div class="inputs-form-row">
                 <div class="inputs-form-row-full">
                     <h4>Email</h4>
-                    <input type="text" placeholder="example@gmail.com">
+                    <input type="text" placeholder="example@gmail.com" v-model="email">
                 </div>
             </div>
 
             <div class="inputs-form-row">
                 <div class="inputs-form-row-full">
                     <h4>Name or Nickname of Baby</h4>
-                    <input type="text" placeholder="Nora Marjorie, Baby Smith, My Angel, etc.">
+                    <input type="text" :disabled="(_props.curId == 3)" placeholder="Nora Marjorie, Baby Smith, My Angel, etc." v-model="babyName">
                 </div>
             </div>
 
             <div class="inputs-form-row">
                 <div class="inputs-form-row-full">
                     <h4>Date (or Dates)</h4>
-                    <input type="text" placeholder="10/3/2021, 10/3/2021 - 10/5/2021, etc.">
-                </div>
-            </div>
-
-            <div class="inputs-form-row">
-                <div class="inputs-form-row-full">
-                    <h4>Supporter Name or Family Name</h4>
-                    <input disabled type="text" placeholder="Andrew, The Lyons Family, etc.">
+                    <input type="text" :disabled="(_props.curId == 3)" placeholder="10/3/2021, 10/3/2021 - 10/5/2021, etc." v-model="dateInfo">
                 </div>
             </div>
 
@@ -45,16 +44,21 @@
                 <div class="inputs-form-row-full">
                     <h4>Local Pickup / Mail (If local, please leave an email for us)</h4>
                     <div class="mailer">
-                        <input type="checkbox">Local
-                        <input type="checkbox" id="mailbox"><span id="mail">Mail</span>
-                        <input type="text" placeholder="Mailing Address">
+                        <input type="checkbox" :disabled="mail" v-model="local">Local
+                        <input type="checkbox" :disabled="local" id="mailbox" v-model="mail"><span id="mail">Mail</span>
+                        <input type="text" :disabled="!mail" placeholder="Mailing Address" v-model="address">
                     </div>
                 </div>
             </div>
 
-            <h3 class="separator">Card Information</h3>
+            <div class="inputs-form-row">
+                <div class="errors" v-if="showErrors">
+                    <h6 v-for="(err, index) in errors" :key="err + index">{{err}}</h6>
+                </div>
+            </div>
 
-            <StripeStuff />
+            
+            <StripeStuff @charge="charge" />
         </div>
     </div>
 </template>
@@ -64,11 +68,118 @@ import StripeStuff from './StripeStuff.vue'
 
 export default {
     name: "Form",
-    components: { StripeStuff }
+    components: { StripeStuff },
+    props: {
+        curId: { type: Number, required: false }
+    },
+    data() {
+        return {
+            option: '',
+            fullName: '',
+            email: '',
+            address: '',
+            babyName: '',
+            dateInfo: '',
+            local: false,
+            mail: false,
+            amount: 1,
+            errors: {
+                ers: []
+            },
+            showErrors: false
+        }
+    },
+    methods: {
+        validate() {
+            this.errors = []
+
+            // no option chosen
+            this.option == "" && this.errors.push("No option selected")
+
+            // option chosen and no name given
+            if (this.option != "") {
+                if (this.option != "Anonymous") {
+                    this.fullName.length == 0 && this.errors.push("No name given")
+                }
+            }
+
+            // invalid email
+            !this.validateEmail(this.email) && this.errors.push("Invalid email")
+
+            // if we need a baby name and dates
+            if (this._props.curId != 3) {
+                // no baby name
+                this.babyName.length == 0 && this.errors.push("No baby name given")
+
+                // no dates
+                this.dateInfo.length == 0 && this.errors.push("No dates provided")
+            }
+
+            if (!this.local) {
+                if (!this.mail) {
+                    this.errors.push("Select local or mail")
+                }
+                else if (this.mail) {
+                    this.address.length == 0 && this.errors.push("No address given")
+                }
+            }
+
+            this.showErrors = this.errors.length > 0
+
+            return this.errors.length == 0
+        },
+        charge(params) {
+            if (this.validate()) {
+                const misc = `baby: ${this.babyName}, date(s): ${this.dateInfo}, address: ${this.address}, local: ${this.local}, mail: ${this.mail}`
+
+                const data = {
+                    card: params,
+                    other: {
+                        name: this.fullName,
+                        email: this.email,
+                        description: misc,
+                        amount: this.amount
+                    }
+                }
+
+                const url = "https://express-nora.herokuapp.com/charge"
+
+                const options = {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data) // body data type must match "Content-Type" header
+                }
+
+                console.log(url, options, 'test')
+                // fetch(url, options)
+                // .then(res => res.json())
+                // .then(data => console.log(data))
+                // .catch(err => console.log('err: ', err))
+            }
+        },
+        error(error) {
+            console.log(error)
+        },
+        validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
+    .errors {
+        display: flex;
+        color: red;
+
+        h6 {
+            padding: 0 6px;
+        }
+    }
+
     .inputs {
         width: 50%;
 
@@ -78,7 +189,7 @@ export default {
 
             background-color: white;
             border-radius: 8px;
-            box-shadow: black 1px 1px 1px 1px;
+            box-shadow: grey 5px 6px 15px 0px;
 
             &-row {
                 display: flex;
@@ -97,6 +208,12 @@ export default {
                         height: 24px;
                         font-family: 'Quicksand', sans-serif;
                         padding-left: 8px;
+                    }
+
+                    select {
+                        width: 100%;
+                        height: 30px;
+                        font-family: 'Quicksand', sans-serif;
                     }
                 }
 
@@ -149,7 +266,7 @@ export default {
                             transition: opacity 0.3s;
 
                             &:hover {
-                            opacity: .8;
+                                opacity: .8;
                             }
                         }
                     }

@@ -124,7 +124,7 @@
               <h2>Here would be a stipulation or explanation point etc.</h2>
             </div>
 
-            <Form />
+            <Form :curId="selector" />
           </div>
         </div>
       </transition>

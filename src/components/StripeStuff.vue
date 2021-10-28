@@ -1,16 +1,18 @@
 <template>
     <div>
         <div class="slider">
-            Heres the slider
+            <input type="range" min="10" max="250" step="10" v-model="amount">
+            <h2>${{amount}}</h2>
         </div>
 
         <stripe-element-card
             ref="elementRef"
             pk="pk_live_51JoyPIIkjxKMhNqcxh1T0Q2hCvWZYGOzo75lLlh2hWGYbnnqpevNMpco6O6xhVb1sNeyTzvLHhgnzNcvNLYkxKXy005m8LgAV6"
-            @token="tokenCreated()"
+            @token="tokenCreated"
+            @error="error"
         />
 
-        <button @click="submit()">Generate token</button>
+        <button @click="submit">Generate token</button>
     </div>
 </template>
 
@@ -23,6 +25,7 @@ export default {
   data() {
     return {
       token: null,
+      amount: 10
     };
   },
   methods: {
@@ -30,20 +33,30 @@ export default {
       // this will trigger the process
       this.$refs.elementRef.submit();
     },
-    tokenCreated(token) {
-      console.log(token);
+    tokenCreated(params) {
+      console.log(params);
       // handle the token
       // send it to your server
-    },
+
+      this.$emit('charge', params)
+    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
     .slider {
+        display: flex;
         width: 100%;
-        box-shadow: black 1px 1px 1px 1px;
         margin-bottom: 24px;
-        margin-top: 12px;
+        margin-top: 36px;
+
+        input[type=range] {
+          width: 66%;
+        }
+
+        h2 {
+          margin: 0 auto;
+        }
     }
 </style>
