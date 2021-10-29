@@ -20,7 +20,7 @@
               :identifier="1" 
               :active="selector == 1" 
               @selected="selected"
-              :img="o1"
+              :img="images[1][0]"
               :config="{
                 name: true,
                 date: true,
@@ -32,7 +32,7 @@
               :identifier="2" 
               :active="selector == 2" 
               @selected="selected"
-              :img="o2"
+              :img="images[2][0]"
               :config="{
                 name: true,
                 date: false,
@@ -45,7 +45,7 @@
               :identifier="3" 
               :active="selector == 3" 
               @selected="selected"
-              :img="o3"
+              :img="images[3][0]"
               :config="{
                 name: true,
                 date: true,
@@ -71,7 +71,7 @@
               :identifier="4" 
               :active="selector == 4" 
               @selected="selected"
-              :img="o4"
+              :img="images[4][0]"
               :config="{
                 name: true,
                 date: true,
@@ -83,7 +83,7 @@
               :identifier="5" 
               :active="selector == 5" 
               @selected="selected"
-              :img="o5"
+              :img="images[5][0]"
               :config="{
                 name: true,
                 date: false,
@@ -95,7 +95,7 @@
               :identifier="6" 
               :active="selector == 6" 
               @selected="selected"
-              :img="o6"
+              :img="images[6][0]"
               :config="{
                 name: true,
                 date: true,
@@ -108,7 +108,7 @@
         <div class="container" key="dos" v-else >
           <div class="container-form">
             <div class="container-form-image">
-              <img class="container-form-image-img" :src="selectedImage" alt="">
+              <ImageCarousel :img="images[selector]" />
               <h3>Here would be a stipulation or explanation point etc. e a stipulation or here is another explanation point etc.</h3>
               <h3>Here would be a stipulation or explanation point etc.</h3>
               <h3>Here would be a stipulation or explanation point etc.</h3>
@@ -128,16 +128,16 @@
 import Draw from './components/Draw.vue'
 import Clickable from './components/Clickable.vue'
 import Form from './components/Form.vue'
-import o1 from './assets/ornaments/1/circle.svg'
-import o2 from './assets/ornaments/2/circle.svg'
-import o3 from './assets/ornaments/3/circle.svg'
-import o4 from './assets/ornaments/4/circle.svg'
-import o5 from './assets/ornaments/5/circle.svg'
-import o6 from './assets/ornaments/6/circle.svg'
-
+import ImageCarousel from './components/ImageCarousel.vue'
+import o1 from './assets/10.svg'
+import o2 from './assets/20.svg'
+import o3 from './assets/30.svg'
+import o4 from './assets/40.svg'
+import o5 from './assets/50.svg'
+import o6 from './assets/60.svg'
 export default {
   name: 'App',
-  components: { Draw,  Clickable, Form },
+  components: { Draw,  Clickable, Form, ImageCarousel },
   data() {
     return {
       selector: 0,
@@ -148,7 +148,16 @@ export default {
       o3: o3,
       o4: o4,
       o5: o5,
-      o6: o6
+      o6: o6,
+      images: [
+        '00_cDJ9okgQj.jpg',
+        [o1, '11_h-uwlPMVy.png', '12_pzwfqxw9TRk.png'],
+        [o2, '21_oNzK9t_hZ.png', '22_t5tB8SeqS.png'],
+        [o3, '31_G1ZkMaNmM.png', '32_kBxbYJO1K.png'],
+        [o4, '41_xKzgqavPoG.png', '42_W_WEelCwi.png'],
+        [o5, '51_X5BphHAuoYm.png', '52_K1cFjEh3f.png'],
+        [o6, '61_Qt7vgxiY7.png', '62_TkFr0z6s_X5.png']
+      ]
     }
   },
   methods: {
@@ -278,7 +287,7 @@ export default {
 
         &-img {
           margin-bottom: 50px;
-          
+
           @media only screen and (max-width: 640px) {
             width: 80vw;
           }
@@ -297,7 +306,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('./assets/treeline.jpg');
+    background-image: url('./assets/00.jpg');
     background-size: cover;
     background-position: 0% 40%;
     background-repeat: no-repeat;

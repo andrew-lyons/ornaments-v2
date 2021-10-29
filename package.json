@@ -10,7 +10,9 @@
   "dependencies": {
     "@vue-stripe/vue-stripe": "^4.2.5",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "imagekitio-vue": "^1.0.9",
+    "vue": "^2.6.11",
+    "vue-carousel": "^0.18.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
