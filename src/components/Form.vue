@@ -1,7 +1,7 @@
 <template>
     <div class="inputs">
         <div class="inputs-form">
-            <div class="inputs-form-row">
+            <div class="inputs-form-row desktop">
                 <div class="inputs-form-row-left">
                     <h4>Option</h4>
                     
@@ -14,6 +14,26 @@
                 </div>
 
                 <div class="inputs-form-row-right">
+                    <h4>Name</h4>
+                    <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
+                </div>
+            </div>
+
+            <div class="inputs-form-row mobile">
+                <div class="inputs-form-row-full">
+                    <h4>Option</h4>
+                    
+                    <select v-model="option">
+                        <option value="">--Please choose an option--</option>
+                        <option value="Full Name">Full Name</option>
+                        <option value="Family Name">Family Name</option>
+                        <option value="Anonymous">Anonymous</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="inputs-form-row mobile">
+                <div class="inputs-form-row-full">
                     <h4>Name</h4>
                     <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
                 </div>
@@ -171,6 +191,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .desktop {
+        @media only screen and (max-width: 1024px) {
+            display: none !important;
+        }
+    }
+
+    .mobile {
+        @media only screen and (min-width: 1025px) {
+            display: none !important;
+        }
+    }
+
     .errors {
         display: flex;
         color: red;
@@ -181,15 +213,38 @@ export default {
     }
 
     .inputs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 50%;
 
-        &-form {
-            margin: 50px;
-            padding: 25px 40px;
+        @media only screen and (max-width: 1360px) {
+            width: 66%;
+        }
 
+        @media only screen and (max-width: 1024px) {
+            width: 100%;
+        }
+
+        &-form {
+            width: 100%;
+            margin: 50px;
+            padding: 75px 50px;
             background-color: white;
             border-radius: 8px;
             box-shadow: grey 5px 6px 15px 0px;
+
+            @media only screen and (max-width: 1360px) {
+                padding: 50px;
+            }
+
+            @media only screen and (max-width: 1024px) {
+                margin: 50px 24px 24px;
+            }
+
+            @media only screen and (max-width: 640px) {
+                padding: 24px;
+            }
 
             &-row {
                 display: flex;

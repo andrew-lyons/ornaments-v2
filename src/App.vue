@@ -1,10 +1,20 @@
 <template>
   <div>
-    <div ref="bg" class="background" />
-
     <main class="page">
+      <div ref="bg" class="background" />
       <transition name="fader" mode="out-in">
         <div class="container" key="uno" v-if="!active">
+          <div class="container-column-mid mobile">
+            <Draw />
+
+            <div class="blurb" ref="blurbm">
+              <h1>Hello! We're so glad you're here.</h1>
+              <h3>Click any of the ornaments for more pictures and personalizations.</h3>
+              <h3>If you're here to support, click the ornament with an orange halo in the bottom left.</h3>
+              <h3>To read more about the purpose, click here.</h3>
+            </div>
+          </div>
+
           <div class="container-column-left">
             <Clickable 
               :identifier="1" 
@@ -45,32 +55,14 @@
             />
           </div>
 
-          <div class="container-column-mid">
+          <div class="container-column-mid desktop">
             <Draw />
 
-            <div class="blurb" ref="blurb">
-              <h1>
-                Hello! We're so glad you're here.
-              </h1>
-
-              <h2>
-                Click any of the ornaments for more pictures and personalizations.
-              </h2>
-              
-              <h2>
-                If you're here to support, click the ornament with an orange halo in the bottom left.
-              </h2>
-
-              <h2>
-                To read more about the purpose, click here.
-              </h2>
-              <!-- <span>
-                Hello! My husband, Andrew, and I recently lost our first baby, Nora Marjorie, in October of this year. Our family got a tree for the Holiday Tree Walk held in Marietta, Ohio at East Muskingum Park, in memory of Nora. I thought that it would be great to honor other babies gone too soon as well. I decided to offer ornaments in memory of these babies that will be displayed on the tree all through December for everyone to acknowledge and celebrate. All proceeds/donations will go to Sufficient Grace Ministries (https://sufficientgraceministries.org), the organization that blessed us with professional pictures of Nora and other resources.
-              </span>
-
-              <span>
-                Once the Tree Walk is over in January, you will get to keep the personalized ornament via either pick up or mail. If you have not lost a baby yourself but would like to donate to this cause, we appreciate you! We would love to add a special ornament to recognize that you support us and our sweet babies (See the special ornament for this).
-              </span> -->
+            <div class="blurb" ref="blurbd">
+              <h1>Hello! We're so glad you're here.</h1>
+              <h3>Click any of the ornaments for more pictures and personalizations.</h3>
+              <h3>If you're here to support, click the ornament with an orange halo in the bottom left.</h3>
+              <h3>To read more about the purpose, click here.</h3>
             </div>
           </div>
           
@@ -117,11 +109,11 @@
           <div class="container-form">
             <div class="container-form-image">
               <img class="container-form-image-img" :src="selectedImage" alt="">
-              <h2>Here would be a stipulation or explanation point etc. e a stipulation or here is another explanation point etc.</h2>
-              <h2>Here would be a stipulation or explanation point etc.</h2>
-              <h2>Here would be a stipulation or explanation point etc.</h2>
-              <h2>Here would be a stipulation or explanation point etc.</h2>
-              <h2>Here would be a stipulation or explanation point etc.</h2>
+              <h3>Here would be a stipulation or explanation point etc. e a stipulation or here is another explanation point etc.</h3>
+              <h3>Here would be a stipulation or explanation point etc.</h3>
+              <h3>Here would be a stipulation or explanation point etc.</h3>
+              <h3>Here would be a stipulation or explanation point etc.</h3>
+              <h3>Here would be a stipulation or explanation point etc.</h3>
             </div>
 
             <Form :curId="selector" />
@@ -172,9 +164,9 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      console.log(this.$refs.blurb)
       this.$refs.bg.classList.add('fade-in')
-      this.$refs.blurb.classList.add('visible')
+      this.$refs.blurbd.classList.add('visible')
+      this.$refs.blurbm.classList.add('visible')
     }, 250)
   }
 }
@@ -186,6 +178,7 @@ export default {
   html, body {
     margin: 0;
     font-family: 'Quicksand', sans-serif;
+    overflow-x: hidden;
   }
 
   hr {
@@ -196,6 +189,7 @@ export default {
   .fader-enter-active, .fader-leave-active {
     transition: opacity .5s;
   }
+
   .fader-enter, .fader-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
@@ -203,11 +197,22 @@ export default {
 </style>
 
 <style scoped lang="scss">
+  .desktop {
+    @media only screen and (max-width: 1024px) {
+      display: none !important;
+    }
+  }
+
+  .mobile {
+    @media only screen and (min-width: 1025px) {
+      display: none !important;
+    }
+  }
+
   .page {
-    /* background-color: #355e3b; */
-    height: 100vh;
+    position: relative;
     width: 100vw;
-    overflow: hidden;
+    height: 100%;
   }
 
   .container {
@@ -215,6 +220,11 @@ export default {
     flex-wrap: nowrap;
     justify-content: center;
     height: 100%;
+    min-height: 100vh;
+
+    @media only screen and (max-width: 1024px) {
+      flex-wrap: wrap;
+    }
 
     &-column {
       &-left, &-right, &-mid {
@@ -228,10 +238,23 @@ export default {
         margin-left: auto;
         margin-right: auto;
         width: 25%;
+        align-content: space-between;
+        padding: 50px 25px;
+
+        @media only screen and (max-width: 1024px) {
+          width: 100%;
+          align-content: unset;
+          flex-wrap: nowrap;
+        }
       }
+      
       &-mid {
-        align-content: flex-start;
         width: 50%;
+        align-content: flex-start;
+
+        @media only screen and (max-width: 1024px) {
+          width: 100%;
+        }
       }
     }
 
@@ -239,16 +262,29 @@ export default {
       width: 100%;
       display: flex;
 
+      @media only screen and (max-width: 1024px) {
+          flex-wrap: wrap;
+      }
+
       &-image {
         width: 50%;
         margin: auto;
         text-align: center;
 
-        &-img {
-          margin-bottom: 50px;
+        @media only screen and (max-width: 1024px) {
+            margin-top: 50px;
+            width: 100%;
         }
 
-        h2 {
+        &-img {
+          margin-bottom: 50px;
+          
+          @media only screen and (max-width: 640px) {
+            width: 80vw;
+          }
+        }
+
+        h3 {
           margin: 0 50px;
         }
       }
@@ -262,7 +298,7 @@ export default {
     right: 0;
     bottom: 0;
     background-image: url('./assets/treeline.jpg');
-    background-size: 140%;
+    background-size: cover;
     background-position: 0% 40%;
     background-repeat: no-repeat;
     opacity: 0;
@@ -288,6 +324,10 @@ export default {
     text-align: center;
     opacity: 0;
     transition: opacity 2s;
+
+    h3 {
+      margin: 12px 0;
+    }
 
     &.visible {
       opacity: 1;

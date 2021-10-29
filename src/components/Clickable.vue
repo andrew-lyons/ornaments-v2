@@ -1,5 +1,14 @@
 <template>
-    <a ref="main" class="clickable" @click="click()">
+    <a
+        ref="main"
+        :class="identifier == 3
+                    ? 'last'
+                    : identifier == 6
+                        ? 'last'
+                        : ''"
+        class="clickable"
+        @click="click()"
+    >
         <img :src="img" alt="" ref="image" :id="identifier">
     </a>
 </template>
@@ -32,8 +41,8 @@ export default {
         overflow: hidden;
         cursor: pointer;
         transition: opacity 5s;
-        height: 200px;
-        width: 200px;
+        height: 14vw;
+        width: 14vw;
         border: 1px solid black;
         border-radius: 50%;
         opacity: 1;
@@ -41,6 +50,12 @@ export default {
 
         &:hover {
             background-color: white;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            height: 25vw;
+            width: 25vw;
+            margin: 0 25px;
         }
     }
 
