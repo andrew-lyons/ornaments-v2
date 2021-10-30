@@ -1,6 +1,7 @@
 <template>
     <a
         ref="main"
+        :style="css"
         :class="identifier == 3
                     ? 'last'
                     : identifier == 6
@@ -23,18 +24,26 @@ export default {
         identifier: { type: Number,  required: true },
         active:     { type: Boolean, required: true },
         img:        { required: false               },
-        config:     { type: Object, required: false }
+        config:     { type: Object, required: false },
+        delay:      { required: false               }
     },
     methods: {
         click() {
             this.$emit('selected', [this.$refs.image, this._props.config])
         }
     },
+    computed: {
+        css() {
+            return {
+                '--delay': this._props.delay
+            }
+        }
+    },
     mounted() {
-        // setTimeout(() => {
-        //     this.$refs.main.classList.add('fade-in-full')
-        // }, 5000)
-    }
+        setTimeout(() => {
+            this.$refs.main.classList.add('fade-in-full')
+        }, 250)
+    },
 }
 </script>
 
@@ -52,12 +61,12 @@ export default {
         display: flex;
         overflow: hidden;
         cursor: pointer;
-        transition: opacity 5s;
+        transition: opacity var(--delay);
         height: 14vw;
         width: 14vw;
         border: 1px solid black;
         border-radius: 50%;
-        opacity: 1;
+        opacity: 0;
         box-shadow: gold 0 0 20px -5px;
 
         &:hover {

@@ -90,7 +90,7 @@ export default {
     name: "Form",
     components: { StripeStuff },
     props: {
-        curId: { type: Number, required: false }
+        curId: { required: false }
     },
     data() {
         return {

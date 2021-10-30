@@ -55,7 +55,7 @@ export default {
             const canvas = this.$refs.canvasRef
             const ctx = canvas.getContext("2d")
 
-            this.drawWord([rightFoot, leftFoot, hands], ctx, 7)
+            this.drawWord([rightFoot, leftFoot, hands], ctx, 10)
         }, 250)
     }
 }

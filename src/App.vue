@@ -17,6 +17,7 @@
 
           <div class="container-column-left">
             <Clickable 
+              delay="4s"
               :identifier="1" 
               :active="selector == 1" 
               @selected="selected"
@@ -28,7 +29,8 @@
                 donatePerson: true
               }"
             />
-            <Clickable 
+            <Clickable
+              delay="5s"
               :identifier="2" 
               :active="selector == 2" 
               @selected="selected"
@@ -40,7 +42,8 @@
                 donatePerson: true
               }"
             />
-            <Clickable 
+            <Clickable
+              delay="6s"
               style="box-shadow: #dba065 0 0 30px 0;"
               class="sixf"
               :identifier="3" 
@@ -57,7 +60,8 @@
           </div>
 
           <div class="container-column-left sixd">
-            <Clickable 
+            <Clickable
+              delay="4s"
               style="box-shadow: #dba065 0 0 30px 0;"
               :identifier="3" 
               :active="selector == 3" 
@@ -71,6 +75,7 @@
               }"
             />
             <Clickable
+              delay="5s"
               :identifier="4" 
               :active="selector == 4" 
               @selected="selected"
@@ -98,6 +103,7 @@
           <div class="container-column-right">
             <Clickable
               class="sixf"
+              delay="6s"
               :identifier="4" 
               :active="selector == 4" 
               @selected="selected"
@@ -109,7 +115,8 @@
                 donatePerson: true
               }"
             />
-            <Clickable 
+            <Clickable
+              delay="3s"
               :identifier="5" 
               :active="selector == 5" 
               @selected="selected"
@@ -121,7 +128,8 @@
                 donatePerson: true
               }"
             />
-            <Clickable 
+            <Clickable
+              delay="4s"
               :identifier="6" 
               :active="selector == 6" 
               @selected="selected"
@@ -136,6 +144,16 @@
           </div>
         </div>
         <div class="container" key="dos" v-else >
+          <a class="backarrow" @click="selector = 0; opacity()">
+            <svg viewBox="0 0 39.446224 31.030203" height="31.030203" width="39.446224">
+              <g>
+                <path
+                  d="m 14.656952,30.835576 c -0.224941,-0.123103 -2.716842,-2.558809 -7.1674311,-7.0058 -3.752433,-3.749399 -6.85588096,-6.81715 -6.89655296,-6.817226 -0.04067,-7.5e-5 -0.174181,-0.158787 -0.296688,-0.352694 -0.176925,-0.280037 -0.229899,-0.465216 -0.257535,-0.900247 -0.07069,-1.112723 -0.684935,-0.40499 7.20690896,-8.3037468 5.2517961,-5.256396 7.1560641,-7.116129 7.4344021,-7.260536 0.767958,-0.398431 1.735802,-0.172797 2.335336,0.544439 0.55363,0.662318 0.624101,1.467849 0.193481,2.21162 -0.0488,0.08429 -2.423095,2.485824 -5.276207,5.336739 -3.0383451,3.0360058 -5.1657861,5.2185798 -5.1351191,5.2681988 0.03796,0.06142 4.3592191,0.08472 15.7160031,0.08472 h 15.663645 l 0.289687,0.160497 c 0.754166,0.417834 0.979342,0.830213 0.979342,1.793526 0,0.627933 -0.01973,0.720849 -0.220509,1.038205 -0.25856,0.408692 -0.639558,0.687025 -1.120487,0.818554 -0.267574,0.07318 -3.798777,0.09464 -15.761761,0.09579 -8.479313,8.12e-4 -15.4342351,0.02947 -15.4553801,0.06369 -0.02115,0.03421 2.239131,2.335938 5.0228361,5.114942 2.783705,2.779004 5.135178,5.15597 5.225495,5.282146 0.349576,0.488372 0.439309,1.063257 0.259998,1.665701 -0.11111,0.373304 -0.889067,1.208336 -1.125746,1.208336 -0.0818,0 -0.170046,0.03448 -0.196093,0.07663 -0.02605,0.04215 -0.278083,0.07407 -0.560078,0.07093 -0.392958,-0.0044 -0.593264,-0.04977 -0.857547,-0.194406 z"
+                  style="fill:#000000;stroke-width:0.0766283" />
+              </g>
+            </svg>
+          </a>
+
           <div class="container-form">
             <div class="container-form-image">
               <ImageCarousel :img="images[selector]" />
@@ -195,6 +213,12 @@ export default {
     selected(arr) {
       this.selector = arr[0].id
       this.selectedImage = arr[0].src
+    },
+    opacity() {
+      for (const e of Object.values(this.$refs)) {
+        console.log(e)
+      }
+      this.$refs.bg.classList.add('fade-in')
     }
   },
   computed: {
@@ -204,9 +228,17 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.$refs.bg.classList.add('fade-in')
-      this.$refs.blurbd.classList.add('visible')
-      this.$refs.blurbm.classList.add('visible')
+      // this is the first time
+      if (!localStorage.noFirstVisit) {
+          // show the element
+          // and do the animation you want
+          this.$refs.bg.classList.add('transf')
+
+          // check this flag for escaping this if block next time
+          localStorage.noFirstVisit = true;
+      }
+
+      this.opacity()
     }, 250)
   }
 }
@@ -258,6 +290,28 @@ export default {
   .sixd {
     @media only screen and (min-width: 641px) {
       display: none !important;
+    }
+  }
+
+  .backarrow {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 75px;
+    height: 50px;
+    z-index: 1000;
+    cursor: pointer;
+    background-color: white;
+    opacity: 0.75;
+    transition: opacity 0.75s;
+    border-radius: 25%;
+    box-shadow: black 2px 2px 10px -4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      opacity: 1;
     }
   }
 
@@ -347,6 +401,14 @@ export default {
     }
   }
 
+  .transf {
+    transition: opacity 15s;
+  }
+
+  .transt {
+    transition: opacity 2s;
+  }
+
   .background {
     position: absolute;
     top: 0;
@@ -359,7 +421,6 @@ export default {
     background-repeat: no-repeat;
     opacity: 0;
     z-index: -100;
-    transition: opacity 15s;
   }
 
   .fade-in {
@@ -378,15 +439,9 @@ export default {
 
   .blurb {
     text-align: center;
-    opacity: 0;
-    transition: opacity 2s;
 
     h3 {
       margin: 12px 0;
-    }
-
-    &.visible {
-      opacity: 1;
     }
   }
 </style>

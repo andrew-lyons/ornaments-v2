@@ -39,6 +39,9 @@ export default {
       // send it to your server
 
       this.$emit('charge', params)
+    },
+    error(err) {
+      console.log(err)
     }
   }
 }

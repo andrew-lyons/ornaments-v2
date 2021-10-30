@@ -2,6 +2,9 @@
   <div>
     <carousel
       :perPage="1"
+      :autoplay="true"
+      :loop="true"
+      :navigationEnabed="true"
     >
       <slide>
         <img width="375" :src="img[0]" alt="">
@@ -36,7 +39,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>
