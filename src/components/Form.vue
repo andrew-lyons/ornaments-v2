@@ -184,8 +184,6 @@ export default {
                     }
                 }
 
-                console.log(params, data)
-
                 const url = "https://express-nora.herokuapp.com/charge"
 
                 const options = {
