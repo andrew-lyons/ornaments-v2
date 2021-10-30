@@ -172,7 +172,7 @@ export default {
         },
         charge(params) {
             if (this.validate()) {
-                const misc = `baby: ${this.babyName}, date(s): ${this.dateInfo}, address: ${this.address}, local: ${this.local}, mail: ${this.mail}`
+                const misc = `baby: ${this.babyName}, date(s): ${this.dateInfo}, address: ${this.address}, local: ${this.local}, mail: ${this.mail} ornament: ${this._props.curId}`
 
                 const data = {
                     card: params[0],
