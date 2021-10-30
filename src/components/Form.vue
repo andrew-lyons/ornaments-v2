@@ -181,7 +181,7 @@ export default {
                         name: this.option == 'Anonymous' ? 'Anonymous' : this.fullName,
                         email: this.email,
                         description: misc,
-                        amount: 1
+                        amount: this.amount
                     }
                 }
 
