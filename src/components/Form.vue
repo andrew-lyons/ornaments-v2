@@ -1,84 +1,93 @@
 <template>
     <div class="inputs">
         <div class="inputs-form">
-            <div class="inputs-form-row desktop">
-                <div class="inputs-form-row-left">
-                    <h4>Option</h4>
-                    
-                    <select v-model="option">
-                        <option value="">--Please choose an option--</option>
-                        <option value="Full Name">Full Name</option>
-                        <option value="Family Name">Family Name</option>
-                        <option value="Anonymous">Anonymous</option>
-                    </select>
+            <div v-if="!completed">
+                <div class="inputs-form-row desktop">
+                    <div class="inputs-form-row-left">
+                        <h4>Option</h4>
+                        
+                        <select v-model="option">
+                            <option value="">--Please choose an option--</option>
+                            <option value="Full Name">Full Name</option>
+                            <option value="Family Name">Family Name</option>
+                            <option value="Anonymous">Anonymous</option>
+                        </select>
+                    </div>
+
+                    <div class="inputs-form-row-right">
+                        <h4>Name</h4>
+                        <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
+                    </div>
                 </div>
 
-                <div class="inputs-form-row-right">
-                    <h4>Name</h4>
-                    <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
+                <div class="inputs-form-row mobile">
+                    <div class="inputs-form-row-full">
+                        <h4>Option</h4>
+                        
+                        <select v-model="option">
+                            <option value="">--Please choose an option--</option>
+                            <option value="Full Name">Full Name</option>
+                            <option value="Family Name">Family Name</option>
+                            <option value="Anonymous">Anonymous</option>
+                        </select>
+                    </div>
                 </div>
+
+                <div class="inputs-form-row mobile">
+                    <div class="inputs-form-row-full">
+                        <h4>Name</h4>
+                        <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
+                    </div>
+                </div>
+
+                <div class="inputs-form-row">
+                    <div class="inputs-form-row-full">
+                        <h4>Email</h4>
+                        <input type="text" placeholder="example@gmail.com" v-model="email">
+                    </div>
+                </div>
+
+                <div class="inputs-form-row">
+                    <div class="inputs-form-row-full">
+                        <h4>Name or Nickname of Baby</h4>
+                        <input type="text" :disabled="(_props.curId == 3)" placeholder="Nora Marjorie, Baby Smith, My Angel, etc." v-model="babyName">
+                    </div>
+                </div>
+
+                <div class="inputs-form-row">
+                    <div class="inputs-form-row-full">
+                        <h4>Date (or Dates)</h4>
+                        <input type="text" :disabled="(_props.curId == 3)" placeholder="10/3/2021, 10/3/2021 - 10/5/2021, etc." v-model="dateInfo">
+                    </div>
+                </div>
+
+                <div class="inputs-form-row">
+                    <div class="inputs-form-row-full">
+                        <h4>Local Pickup / Mail</h4>
+                        <div class="mailer">
+                            <input type="checkbox" :disabled="mail" v-model="local">Local
+                            <input type="checkbox" :disabled="local" id="mailbox" v-model="mail"><span id="mail">Mail</span>
+                            <input type="text" :disabled="!mail" placeholder="Mailing Address" v-model="address">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inputs-form-row">
+                    <div class="errors" v-if="showErrors">
+                        <h6 v-for="(err, index) in errors" :key="err + index">{{err}}</h6>
+                    </div>
+                </div>
+                
+                <StripeStuff @charge="charge" />
             </div>
-
-            <div class="inputs-form-row mobile">
-                <div class="inputs-form-row-full">
-                    <h4>Option</h4>
-                    
-                    <select v-model="option">
-                        <option value="">--Please choose an option--</option>
-                        <option value="Full Name">Full Name</option>
-                        <option value="Family Name">Family Name</option>
-                        <option value="Anonymous">Anonymous</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="inputs-form-row mobile">
-                <div class="inputs-form-row-full">
-                    <h4>Name</h4>
-                    <input type="text" :disabled="option == 'Anonymous' || option == ''" v-model="fullName">
-                </div>
-            </div>
-
-            <div class="inputs-form-row">
-                <div class="inputs-form-row-full">
-                    <h4>Email</h4>
-                    <input type="text" placeholder="example@gmail.com" v-model="email">
-                </div>
-            </div>
-
-            <div class="inputs-form-row">
-                <div class="inputs-form-row-full">
-                    <h4>Name or Nickname of Baby</h4>
-                    <input type="text" :disabled="(_props.curId == 3)" placeholder="Nora Marjorie, Baby Smith, My Angel, etc." v-model="babyName">
-                </div>
-            </div>
-
-            <div class="inputs-form-row">
-                <div class="inputs-form-row-full">
-                    <h4>Date (or Dates)</h4>
-                    <input type="text" :disabled="(_props.curId == 3)" placeholder="10/3/2021, 10/3/2021 - 10/5/2021, etc." v-model="dateInfo">
-                </div>
-            </div>
-
-            <div class="inputs-form-row">
-                <div class="inputs-form-row-full">
-                    <h4>Local Pickup / Mail</h4>
-                    <div class="mailer">
-                        <input type="checkbox" :disabled="mail" v-model="local">Local
-                        <input type="checkbox" :disabled="local" id="mailbox" v-model="mail"><span id="mail">Mail</span>
-                        <input type="text" :disabled="!mail" placeholder="Mailing Address" v-model="address">
+            <div v-else>
+                <div class="inputs-form-row">
+                    <div class="inputs-form-row-full">
+                        <h2>{{success ? 'Success! Thank you so much for your donation.' : 'Something went wrong...'}}</h2>
+                        <h2 v-if="!success">{{message}}</h2>
                     </div>
                 </div>
             </div>
-
-            <div class="inputs-form-row">
-                <div class="errors" v-if="showErrors">
-                    <h6 v-for="(err, index) in errors" :key="err + index">{{err}}</h6>
-                </div>
-            </div>
-
-            
-            <StripeStuff @charge="charge" />
         </div>
     </div>
 </template>
@@ -106,7 +115,10 @@ export default {
             errors: {
                 ers: []
             },
-            showErrors: false
+            showErrors: false,
+            completed: false,
+            success: false,
+            message: ''
         }
     },
     methods: {
@@ -158,7 +170,7 @@ export default {
                         name: this.fullName,
                         email: this.email,
                         description: misc,
-                        amount: this.amount
+                        amount: 1
                     }
                 }
 
@@ -172,11 +184,21 @@ export default {
                     body: JSON.stringify(data) // body data type must match "Content-Type" header
                 }
 
-                console.log(url, options, 'test')
-                // fetch(url, options)
-                // .then(res => res.json())
-                // .then(data => console.log(data))
-                // .catch(err => console.log('err: ', err))
+                fetch(url, options)
+                .then(res => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        this.completed = true
+                        this.success = true
+                        this.message = data.message
+                    }
+                    else {
+                        this.completed = true
+                        this.success = false
+                        this.message = data.message.code
+                    }
+                })
+                .catch(err => console.log('err: ', err))
             }
         },
         error(error) {
@@ -229,7 +251,7 @@ export default {
         &-form {
             width: 100%;
             margin: 50px;
-            padding: 75px 50px;
+            padding: 50px;
             background-color: white;
             border-radius: 8px;
             box-shadow: grey 5px 6px 15px 0px;

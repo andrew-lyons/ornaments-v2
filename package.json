@@ -11,6 +11,7 @@
     "@vue-stripe/vue-stripe": "^4.2.5",
     "core-js": "^3.6.5",
     "imagekitio-vue": "^1.0.9",
+    "scroll-behavior-polyfill": "^2.0.13",
     "vue": "^2.6.11",
     "vue-carousel": "^0.18.0"
   },

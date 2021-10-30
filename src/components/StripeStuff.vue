@@ -12,12 +12,17 @@
             @error="error"
         />
 
-        <button @click="submit">Generate token</button>
+        <div class="checkout">
+          <a @click="submit">Submit Donation</a>
+          <img :src="st" alt="">
+        </div>
     </div>
 </template>
 
 <script>
 import { StripeElementCard } from '@vue-stripe/vue-stripe';
+import st from '../assets/02.png'
+
 export default {
   components: {
     StripeElementCard,
@@ -25,19 +30,15 @@ export default {
   data() {
     return {
       token: null,
-      amount: 10
+      amount: 10,
+      st: st
     };
   },
   methods: {
     submit() {
-      // this will trigger the process
       this.$refs.elementRef.submit();
     },
     tokenCreated(params) {
-      console.log(params);
-      // handle the token
-      // send it to your server
-
       this.$emit('charge', params)
     },
     error(err) {
@@ -61,5 +62,39 @@ export default {
         h2 {
           margin: 0 auto;
         }
+    }
+
+    .checkout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      @media only screen and (max-width: 640px) {
+        flex-wrap: wrap;
+      }
+
+      a {
+        font-weight: 400;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        background-color: rgba(159, 212, 208, 0.75);
+        cursor: pointer;
+        padding: 12px 16px;
+        box-shadow: grey 0px 0px 10px 2px;
+        margin-right: 24px;
+
+        transition: background-color 0.5s;
+
+        &:hover {
+          background-color: rgba(159, 212, 208, 1);
+        }
+
+        @media only screen and (max-width: 640px) {
+          width: 100%;
+          margin: 0 0 24px 0;
+        }
+      }
     }
 </style>

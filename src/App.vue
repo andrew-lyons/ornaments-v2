@@ -9,9 +9,9 @@
 
             <div class="blurb" ref="blurbm">
               <h1>Hello! We're so glad you're here.</h1>
-              <h3>Click any of the ornaments for more pictures and personalizations.</h3>
-              <h3>If you're here to support, click the ornament with an orange halo in the bottom left.</h3>
-              <h3>To read more about the purpose, click here.</h3>
+              <h3>If you're here to honor your baby, click any of the ornaments for more pictures and personalizations.</h3>
+              <h3>If you're here to support, click the ornament with the blue halo.</h3>
+              <h3>To read more about the purpose, <a class="bt" @click="scrollRead()">click here.</a></h3>
             </div>
           </div>
 
@@ -44,7 +44,7 @@
             />
             <Clickable
               delay="6s"
-              style="box-shadow: #dba065 0 0 30px 0;"
+              style="box-shadow: blue 0 0 30px -10px;"
               class="sixf"
               :identifier="3" 
               :active="selector == 3" 
@@ -62,7 +62,7 @@
           <div class="container-column-left sixd">
             <Clickable
               delay="4s"
-              style="box-shadow: #dba065 0 0 30px 0;"
+              style="box-shadow: blue 0 0 30px -10px;"
               :identifier="3" 
               :active="selector == 3" 
               @selected="selected"
@@ -94,9 +94,9 @@
 
             <div class="blurb" ref="blurbd">
               <h1>Hello! We're so glad you're here.</h1>
-              <h3>Click any of the ornaments for more pictures and personalizations.</h3>
-              <h3>If you're here to support, click the ornament with an orange halo in the bottom left.</h3>
-              <h3>To read more about the purpose, click here.</h3>
+              <h3>If you're here to honor your baby, click any of the ornaments for more pictures and personalizations.</h3>
+              <h3>If you're here to support, click the ornament with the blue halo.</h3>
+              <h3>To read more about the purpose, <a class="bt" @click="scrollRead()">click here.</a></h3>
             </div>
           </div>
           
@@ -170,6 +170,35 @@
         </div>
       </transition>
     </main>
+    <main id="readmore" v-if="!active">
+      <div class="bg" />
+      <div class="readmore-text">
+        <h3>
+          Hello! My husband, Andrew, and I recently lost our first baby, Nora Marjorie, 
+          in October of this year. It was the hardest thing that we have ever been through. 
+          We have realized since, that pregnancy loss and baby loss continues to be a taboo 
+          subject in our world. We hope to increase awareness in honor of our sweet Nora, and 
+          recognize the realness of your baby's life, even though they are no longer here with you.
+        </h3>
+
+        <h3>
+          Our family got a tree for the Holiday Tree Walk held in Marietta, Ohio at East Muskingum Park, 
+          in memory of Nora. I have found so much community with those who have shared their stories of 
+          loss with me, and I thought that it would be great to honor other babies gone too soon as well. 
+          I decided to offer ornaments in memory of these babies that will be displayed on the tree all 
+          through December for everyone to acknowledge and celebrate. All proceeds/donations will go to 
+          Sufficient Grace Ministries (<a class="bt" href="https://sufficientgraceministries.org">Link To Site</a>), the organization that blessed 
+          us with professional pictures of Nora, a perfectly sized gown and hat for her, and other resources. 
+        </h3>
+
+        <h3>
+          We are so sorry for your loss, but we want to honor your sweet babies. Once the Tree Walk is over in 
+          January, you will get to keep the personalized ornament via either pick up or mail. If you have not 
+          lost a baby yourself but would like to donate to this cause, we appreciate you! We would love to add a 
+          special ornament to recognize that you support us and our sweet babies (See the "we stand with you" ornament).
+        </h3>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -184,6 +213,11 @@ import o3 from './assets/30.svg'
 import o4 from './assets/40.svg'
 import o5 from './assets/50.svg'
 import o6 from './assets/60.svg'
+
+if (!("scrollBehavior" in document.documentElement.style)) {
+  import("scroll-behavior-polyfill");
+}
+
 export default {
   name: 'App',
   components: { Draw,  Clickable, Form, ImageCarousel },
@@ -215,10 +249,16 @@ export default {
       this.selectedImage = arr[0].src
     },
     opacity() {
-      for (const e of Object.values(this.$refs)) {
-        console.log(e)
-      }
       this.$refs.bg.classList.add('fade-in')
+    },
+    scrollRead() {
+      window.scrollTo({top: document.getElementById('readmore').getBoundingClientRect().top, behavior: 'smooth'})
+    }
+  },
+  watch: {
+    // whenever question changes, this function will run
+  selector: function () {
+      window.scrollTo({ top: 0, left: 0 })
     }
   },
   computed: {
@@ -293,8 +333,44 @@ export default {
     }
   }
 
+  .bt {
+    color: gray;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  #readmore {
+    padding: 100px 300px;
+    min-height: 600px;
+    position: relative;
+
+    @media only screen and (max-width: 1024px) {
+      min-height: 800px;
+      padding: 50px 100px;
+    }
+
+    @media only screen and (max-width: 640px) {
+      padding: 24px 75px;
+      min-height: 1000px;
+    }
+
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('./assets/03.jpg');
+      background-size: cover;
+      background-position: 0% 40%;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+      z-index: -100;
+    }
+  }
+
   .backarrow {
-    position: absolute;
+    position: fixed;
     top: 16px;
     left: 16px;
     width: 75px;
