@@ -64,6 +64,11 @@ export default {
             background-color: white;
         }
 
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
         @media only screen and (max-width: 1024px) {
             height: 25vw;
             width: 25vw;
