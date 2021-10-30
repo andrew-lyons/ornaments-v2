@@ -1,6 +1,10 @@
 <template>
     <div class="inputs">
-        <div class="inputs-form">
+        <div class="inputs-form" :class="completed
+                                    ? success
+                                        ? 'green'
+                                        : 'red'
+                                    : ''">
             <div v-if="!completed">
                 <div class="inputs-form-row desktop">
                     <div class="inputs-form-row-left">
@@ -77,8 +81,14 @@
                         <h6 v-for="(err, index) in errors" :key="err + index">{{err}}</h6>
                     </div>
                 </div>
+
+                <div :class="processing && 'processing'">
+                    <div class="lds-dual-ring" v-if="processing">
+                        
+                    </div>
+                    <StripeStuff @charge="charge" />
+                </div>
                 
-                <StripeStuff @charge="charge" />
             </div>
             <div v-else>
                 <div class="inputs-form-row">
@@ -118,7 +128,8 @@ export default {
             showErrors: false,
             completed: false,
             success: false,
-            message: ''
+            message: '',
+            processing: false
         }
     },
     methods: {
@@ -167,7 +178,7 @@ export default {
                 const data = {
                     card: params,
                     other: {
-                        name: this.fullName,
+                        name: this.option == 'Anonymous' ? 'Anonymous' : this.fullName,
                         email: this.email,
                         description: misc,
                         amount: 1
@@ -184,17 +195,21 @@ export default {
                     body: JSON.stringify(data) // body data type must match "Content-Type" header
                 }
 
+                this.processing = true
+
                 fetch(url, options)
                 .then(res => res.json())
                 .then((data) => {
                     if (data.success) {
                         this.completed = true
                         this.success = true
+                        this.processing = false
                         this.message = data.message
                     }
                     else {
                         this.completed = true
                         this.success = false
+                        this.processing = false
                         this.message = data.message.code
                     }
                 })
@@ -222,6 +237,51 @@ export default {
     .mobile {
         @media only screen and (min-width: 1025px) {
             display: none !important;
+        }
+    }
+
+    .green {
+        background-color: lightgreen !important;
+    }
+
+    .red {
+        background-color: lightcoral !important;
+    }
+
+    .processing {
+        opacity: 0.5;
+        position: relative;
+        pointer-events: none;
+
+        .lds-dual-ring {
+            position: absolute;
+            top: 25%;
+            left: 40%;
+
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+
+            &:after {
+                content: " ";
+                display: block;
+                width: 64px;
+                height: 64px;
+                margin: 8px;
+                border-radius: 50%;
+                border: 6px solid #000;
+                border-color: #000 transparent #000 transparent;
+                animation: lds-dual-ring 1.2s linear infinite;
+            }
+
+            @keyframes lds-dual-ring {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         }
     }
 
