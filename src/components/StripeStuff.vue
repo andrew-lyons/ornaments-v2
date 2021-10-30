@@ -39,7 +39,7 @@ export default {
       this.$refs.elementRef.submit();
     },
     tokenCreated(params) {
-      this.$emit('charge', params)
+      this.$emit('charge', [params, this.amount])
     },
     error(err) {
       console.log(err)

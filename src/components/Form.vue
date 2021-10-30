@@ -121,7 +121,6 @@ export default {
             dateInfo: '',
             local: false,
             mail: false,
-            amount: 1,
             errors: {
                 ers: []
             },
@@ -176,23 +175,23 @@ export default {
                 const misc = `baby: ${this.babyName}, date(s): ${this.dateInfo}, address: ${this.address}, local: ${this.local}, mail: ${this.mail}`
 
                 const data = {
-                    card: params,
+                    card: params[0],
                     other: {
                         name: this.option == 'Anonymous' ? 'Anonymous' : this.fullName,
                         email: this.email,
                         description: misc,
-                        amount: this.amount
+                        amount: params[1]
                     }
                 }
+
+                console.log(params, data)
 
                 const url = "https://express-nora.herokuapp.com/charge"
 
                 const options = {
                     method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data) // body data type must match "Content-Type" header
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 }
 
                 this.processing = true
