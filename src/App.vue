@@ -42,10 +42,39 @@
             />
             <Clickable 
               style="box-shadow: #dba065 0 0 30px 0;"
+              class="sixf"
               :identifier="3" 
               :active="selector == 3" 
               @selected="selected"
               :img="images[3][0]"
+              :config="{
+                name: true,
+                date: true,
+                dates: false,
+                donatePerson: true
+              }"
+            />
+          </div>
+
+          <div class="container-column-left sixd">
+            <Clickable 
+              style="box-shadow: #dba065 0 0 30px 0;"
+              :identifier="3" 
+              :active="selector == 3" 
+              @selected="selected"
+              :img="images[3][0]"
+              :config="{
+                name: true,
+                date: true,
+                dates: false,
+                donatePerson: true
+              }"
+            />
+            <Clickable
+              :identifier="4" 
+              :active="selector == 4" 
+              @selected="selected"
+              :img="images[4][0]"
               :config="{
                 name: true,
                 date: true,
@@ -67,7 +96,8 @@
           </div>
           
           <div class="container-column-right">
-            <Clickable 
+            <Clickable
+              class="sixf"
               :identifier="4" 
               :active="selector == 4" 
               @selected="selected"
@@ -109,11 +139,12 @@
           <div class="container-form">
             <div class="container-form-image">
               <ImageCarousel :img="images[selector]" />
-              <h3>Here would be a stipulation or explanation point etc. e a stipulation or here is another explanation point etc.</h3>
-              <h3>Here would be a stipulation or explanation point etc.</h3>
-              <h3>Here would be a stipulation or explanation point etc.</h3>
-              <h3>Here would be a stipulation or explanation point etc.</h3>
-              <h3>Here would be a stipulation or explanation point etc.</h3>
+              <h3 style="margin-top: 6px;">
+                Please note that the ornaments will be displayed at the Marietta, Ohio Holiday Tree Walk 
+                through the month of December. We will send/offer pick up for the ornaments after the Tree Walk is over.
+              </h3>
+              <h3 style="margin-top: 6px; margin-bottom: 6px;">These ornaments are 4 inch acrylic discs with personalized engraving.</h3>
+              <h3>All donations from this effort will go to Sufficient Grace Ministries.</h3>
             </div>
 
             <Form :curId="selector" />
@@ -218,6 +249,18 @@ export default {
     }
   }
 
+  .sixf {
+    @media only screen and (max-width: 640px) {
+      display: none !important;
+    }
+  }
+
+  .sixd {
+    @media only screen and (min-width: 641px) {
+      display: none !important;
+    }
+  }
+
   .page {
     position: relative;
     width: 100vw;
@@ -254,6 +297,10 @@ export default {
           width: 100%;
           align-content: unset;
           flex-wrap: nowrap;
+        }
+
+        @media only screen and (max-width: 640px) {
+          padding: 25px;
         }
       }
       

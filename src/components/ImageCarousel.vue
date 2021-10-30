@@ -4,13 +4,13 @@
       :perPage="1"
     >
       <slide>
-        <img :src="img[0]" alt="">
+        <img width="375" :src="img[0]" alt="">
       </slide>
       <slide>
-        <ik-image width="400" :path="img[1]"></ik-image>
+        <ik-image width="375" :path="img[1]"></ik-image>
       </slide>
       <slide>
-        <ik-image width="400" :path="img[2]"></ik-image>
+        <ik-image width="375" :path="img[2]"></ik-image>
       </slide>
     </carousel>
   </div>

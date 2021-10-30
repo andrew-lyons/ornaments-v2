@@ -68,7 +68,7 @@ export default {
 }
 
 canvas {
-    padding: 25px 35px 25px 0px
+    padding: 25px 0px 25px 0px
 }
 
 </style>

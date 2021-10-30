@@ -62,7 +62,7 @@
 
             <div class="inputs-form-row">
                 <div class="inputs-form-row-full">
-                    <h4>Local Pickup / Mail (If local, please leave an email for us)</h4>
+                    <h4>Local Pickup / Mail</h4>
                     <div class="mailer">
                         <input type="checkbox" :disabled="mail" v-model="local">Local
                         <input type="checkbox" :disabled="local" id="mailbox" v-model="mail"><span id="mail">Mail</span>
@@ -255,7 +255,7 @@ export default {
 
                     h4 {
                         margin-top: 3px;
-                        margin-bottom: 3px;
+                        margin-bottom: 6px;
                     }
 
                     & input[type=text] {

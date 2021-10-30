@@ -9,6 +9,9 @@
         class="clickable"
         @click="click()"
     >
+        <!-- <svg class="outline" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="50"/>
+        </svg> -->
         <img :src="img" alt="" ref="image" :id="identifier">
     </a>
 </template>
@@ -36,6 +39,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .outline {
+        position: absolute;
+        width: 14vw;
+        height: 14vw;
+        z-index: -10;
+        fill: none;
+        stroke: blue;
+    }
+
     .clickable {
         display: flex;
         overflow: hidden;
@@ -56,6 +68,12 @@ export default {
             height: 25vw;
             width: 25vw;
             margin: 0 25px;
+        }
+
+        @media only screen and (max-width: 640px) {
+            height: 40vw;
+            width: 40vw;
+            margin: 0 15px;
         }
     }
 
