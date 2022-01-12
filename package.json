@@ -13,7 +13,8 @@
     "imagekitio-vue": "^1.0.9",
     "scroll-behavior-polyfill": "^2.0.13",
     "vue": "^2.6.11",
-    "vue-carousel": "^0.18.0"
+    "vue-carousel": "^0.18.0",
+    "vue-meta": "^2.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
