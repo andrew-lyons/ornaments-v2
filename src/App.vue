@@ -59,6 +59,13 @@ import animationData from './assets/json/peace.json';
 
 export default {
   name: 'App',
+  metaInfo: () => ({
+    title: 'Honoring Our Babies',
+    htmlAttrs: {
+      lang: 'en',
+      amp: undefined
+    }
+  }),
   components: {
     'lottie': Lottie
   },
@@ -142,7 +149,6 @@ export default {
     // Register an event listener when the Vue component is ready
     window.addEventListener('resize', this.onResize)
   },
-
   beforeDestroy() {
     // Unregister the event listener before destroying this Vue instance
     window.removeEventListener('resize', this.onResize)
