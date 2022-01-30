@@ -1,8 +1,9 @@
 <template>
   <main>
-    <div class="bodytext">
+    <div class="bodytext" :style="{ '--align-content': squareAR ? 'center' : 'space-between' }">
       <h1 class="bodytext-title">Welcome</h1>
       <h2 class="bodytext-subtitle">This year, we honored 150 babies and donated $2,500 to Pregnancy + Infant Loss organization Sufficient Grace Ministries.</h2>
+      
       <div class="bodytext-list">
         <h2>To combat P+I Loss stigma, and to help provide for those who need it, we are working on:</h2>
         <ul>
@@ -18,8 +19,11 @@
       <div class="bodytext-inputs">
         <div class="bodytext-inputs-text">
           <h2>If you want to keep in touch...</h2>
+          <h2 class="bodytext-inputs-text-arrow one">^</h2>
+          <h2 class="bodytext-inputs-text-arrow two">^</h2>
           <h4>(We don't send spam emails, promise!)</h4>
         </div>
+
         <div class="bodytext-inputs-submit">
           <div class="bodytext-inputs-submit-input">
             <input class="input-1" type="text" placeholder="Drop your email for updates!">
@@ -33,7 +37,11 @@
       </div>
     </div>
 
-    <lottie class="lottie-main-al" :options="defaultOptions" v-on:animCreated="handleAnimation"/>
+    <lottie
+      class="lottie-main-al"
+      :class="squareAR ? 'lottie-main-al-extrashift' : ''"
+      :options="{ animationData: animation }"
+    />
   </main>
 </template>
 
@@ -53,23 +61,33 @@ export default {
   },
   data() {
     return {
-      redSize: 24.3,
-      tealSize: 17.7,
-      goldSize: 16.8,
-      greenSize: 16.8,
-      purpleSize: 23.4,
-      incr: 1,
-      defaultOptions: {animationData: animationData},
-      animationSpeed: 1
+      squareAR: false
     }
   },
   methods: {
-      handleAnimation(anim) {
-        this.anim = anim;
+    onResize() {
+      if (window.innerWidth >= 1024) {
+        this.squareAR = window.innerHeight / window.innerWidth >= 0.69;
+      } else {
+        this.squareAR = false;
       }
+    }
   },
-  computed: {},
-  mounted() {}
+  computed: {
+    animation() {
+      return animationData;
+    }
+  },
+  mounted() {
+    this.onResize();
+    // Register an event listener when the Vue component is ready
+    window.addEventListener('resize', this.onResize)
+  },
+
+  beforeDestroy() {
+    // Unregister the event listener before destroying this Vue instance
+    window.removeEventListener('resize', this.onResize)
+  }
 }
 </script>
 
@@ -91,20 +109,23 @@ export default {
   main {
     position: relative;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
     display: flex;
-
-    @media (max-width: 1024px) {
-      flex-wrap: wrap;
-    }
+    flex-wrap: wrap;
   }
 
   .bodytext {
+    --h1-f: 36px;
+    --h1-l: calc(var(--h1-f) + 8px);
+    --h2-f: 24px;
+    --h2-l: calc(var(--h2-f) + 8px);
+    --li-f: 16px;
+    --li-l: calc(var(--li-f) + 12px);
+    --align-content: space-between;
+
+    position: relative;
     display: flex;
     flex-wrap: wrap;
-    align-content: space-between;
-    position: relative;
+    align-content: var(--align-content);
     z-index: 10;
     width: 45%;
     padding: 50px;
@@ -119,71 +140,74 @@ export default {
     }
 
     @media (max-width: 1024px) {
+      --h1-f: 30px;
+      --h2-f: 24px;
+      padding: 25px 50px;
+    }
+
+    @media (max-width: 820px) {
+      align-content: flex-start;
+      width: 70%;
+    }
+
+    @media (max-width: 640px) {
       width: 100%;
-      padding: 25px;
+      padding: 50px;
+
+      --li-f: 24px;
+    }
+
+    @media (min-width: 1536px) {
+      --h1-f: 48px;
+      --h2-f: 32px;
+      --li-f: 20px;
     }
 
     @media (min-width: 1800px) {
+      --h1-f: 56px;
+      --h2-f: 40px;
       padding: 100px 50px;
     }
 
     &-title {
       margin: 0 0 12px 0;
-      font-size: 36px;
-      line-height: 36px;
-
-      @media (min-width: 1536px) {
-        font-size: 48px;
-        line-height: 48px;
-      }
-
-      @media (min-width: 1800px) {
-        font-size: 56px;
-        line-height: 64px;
-      }
-
-      @media (max-width: 1024px) {
-        font-size: 30px;
-        line-height: 30px;
-      }
+      font-size: var(--h1-f);
+      line-height: var(--h1-l);
     }
 
     &-subtitle {
       margin: 0 0 12px 0;
-
-      @media (min-width: 1536px) {
-        font-size: 32px;
-        line-height: 36px;
-      }
+      font-size: var(--h2-f);
+      line-height: var(--h2-l);
     }
 
     &-list {
       h2 {
         margin-top: 0;
         margin-bottom: 12px;
-
-        @media (min-width: 1536px) {
-          font-size: 32px;
-          line-height: 36px;
-        }
+        font-size: var(--h2-f);
+        line-height: var(--h2-l);
       }
 
       ul {
         margin-top: 0;
-      }
 
-      li {
-        font-size: 16px;
-        line-height: 24px;
+        @media (max-width: 820px) {
+          max-width: 66%;
+        }
 
-        @media (min-width: 1536px) {
-          font-size: 20px;
-          line-height: 34px;
+        @media (max-width: 640px) {
+          max-width: unset;
         }
       }
 
-      li::marker {
-        color: #2a3b50;
+      li {
+        font-size: var(--li-f);
+        line-height: var(--li-l);
+
+        &::marker {
+          color: #2a3b50;
+        }
       }
     }
 
@@ -192,7 +216,44 @@ export default {
       flex-wrap: wrap;
       justify-content: center;
 
+      @media (max-width: 820px) {
+        justify-content: left;
+      }
+
+      @media (max-width: 640px) {
+        justify-content: center;
+      }
+
       &-text {
+        position: relative;
+        margin-bottom: 24px;
+
+        @media (max-width: 640px) {
+          text-align: center;
+        }
+
+        &-arrow {
+          @media (min-width: 1025px) {
+            display: none;
+          }
+
+          @media (max-width: 640px) {
+            display: none;
+          }
+
+          position: absolute;
+          transform: rotate(180deg);
+          left: -24px;
+
+          &.one {
+            top: -6px;
+          }
+
+          &.two {
+            top: 12px;
+          }
+        }
+
         h2, h4 {
           margin: 0;
         }
@@ -207,8 +268,6 @@ export default {
         h4 {
           font-style: italic;
         }
-
-        margin-bottom: 24px;
       }
 
       &-submit {
@@ -217,9 +276,22 @@ export default {
         width: 100%;
         justify-content: space-evenly;
 
+        @media (max-width: 820px) {
+          justify-content: left;
+          flex-wrap: wrap;
+        }
+
+        @media (max-width: 640px) {
+          justify-content: center;
+        }
+
         &-input {
           display: flex;
           flex-wrap: wrap;
+
+          @media (max-width: 640px) {
+            justify-content: center;
+          }
 
           input {
             width: calc(100% - 12px);
@@ -229,6 +301,14 @@ export default {
             box-shadow: 2px 3px 3px 1px #2a3b50;
             font-size: 16px;
             line-height: 20px;
+          }
+
+          @media (max-width: 1024px) {
+            max-width: 60%;
+          }
+
+          @media (max-width: 640px) {
+            max-width: unset;
           }
 
           .input-1 {
@@ -244,6 +324,20 @@ export default {
           display: flex;
           align-items: center;
 
+          @media (max-width: 1024px) {
+            margin-top: 24px;
+            margin-left: 24px;
+          }
+
+          @media (max-width: 820px) {
+            width: 100%;
+            margin-left: 0;
+          }
+
+          @media (max-width: 640px) {
+            justify-content: center;
+          }
+
           &-submitEmail {
             font-size: 24px;
             line-height: 24px;
@@ -253,19 +347,16 @@ export default {
             border-radius: 12px;
             background-color: #FFFFFF;
             transition: background-color 0.25s, color 0.25s;
+            box-shadow: 2px 3px 3px 1px #2a3b50;
 
             @media (max-width: 1024px) {
-              padding: 6px 12px;
+              padding: 12px;
             }
 
             &:hover {
               background-color: #2a3b50;
               color: #FFFFFF;
             }
-          }
-
-          @media (max-width: 1024px) {
-            margin-top: 24px;
           }
         }
       }
@@ -277,13 +368,28 @@ export default {
     width: var(--dim) !important;
     height: 100vh !important;
     margin: 0px !important;
-    position: absolute;
+    position: fixed;
     right: -10%;
     z-index: 9;
 
-    @media (max-width: 1024px) {
-      position: relative;
-      width: 100vw !important;
+    &-extrashift {
+      right: -30%;
+    }
+
+    @media (max-width: 820px) {
+      right: -90%;
+      bottom: -10%;
+    }
+
+    @media (max-width: 768px) {
+      right: -75%;
+      bottom: -10%;
+    }
+
+    @media (max-width: 640px) {
+      right: -90%;
+      bottom: 0;
+      opacity: 0.25;
     }
   }
 
