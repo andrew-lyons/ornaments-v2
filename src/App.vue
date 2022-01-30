@@ -132,7 +132,7 @@ export default {
     color: rgb(42, 59, 80);
 
     @media (max-width: 1440px) {
-      padding: 100px 50px;
+      padding: 50px;
     }
 
     @media (max-width: 1366px) {
@@ -390,6 +390,10 @@ export default {
       right: -90%;
       bottom: 0;
       opacity: 0.25;
+    }
+
+    @media (max-width: 450px) {
+      right: -110vw;
     }
   }
 
