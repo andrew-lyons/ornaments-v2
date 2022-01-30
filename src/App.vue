@@ -2,7 +2,7 @@
   <main>
     <div class="bodytext" :style="{ '--align-content': squareAR ? 'center' : 'space-between' }">
       <h1 class="bodytext-title">Welcome</h1>
-      <h2 class="bodytext-subtitle">This year, we honored 150 babies and donated $2,500 to Pregnancy + Infant Loss organization Sufficient Grace Ministries.</h2>
+      <h2 class="bodytext-subtitle">This year, we honored over 120 babies and donated $2,500 to Pregnancy + Infant Loss organization Sufficient Grace Ministries.</h2>
       
       <div class="bodytext-list">
         <h2>To combat P+I Loss stigma, and to help provide for those who need it, we are working on:</h2>
