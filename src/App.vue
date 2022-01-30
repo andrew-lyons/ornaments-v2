@@ -26,12 +26,15 @@
 
         <div class="bodytext-inputs-submit">
           <div class="bodytext-inputs-submit-input">
-            <input class="input-1" type="text" placeholder="Drop your email for updates!">
-            <input type="text" placeholder="Send us a message. (Optional)">
+            <input v-model="email" class="input-1" type="text" placeholder="Drop your email for updates!">
+            <input v-model="msg" type="text" placeholder="Send us a message. (Optional)">
           </div>
 
           <div class="bodytext-inputs-submit-button">
-            <a href="" class="bodytext-inputs-submit-button-submitEmail">Submit</a>
+            <a
+              class="bodytext-inputs-submit-button-submitEmail"
+              @click="sendMail"
+            >{{userFeedback()}} {{confirmedMsg}}</a>
           </div>
         </div>
       </div>
@@ -61,7 +64,13 @@ export default {
   },
   data() {
     return {
-      squareAR: false
+      squareAR: false,
+      email: '',
+      msg: '',
+      sent: false,
+      loading: false,
+      confirmed: false,
+      confirmedMsg: ''
     }
   },
   methods: {
@@ -70,6 +79,56 @@ export default {
         this.squareAR = window.innerHeight / window.innerWidth >= 0.69;
       } else {
         this.squareAR = false;
+      }
+    },
+    async sendMail() {
+      if (this.sent) {
+        return
+      }
+      this.sent = true;
+
+      const body = {
+        email: this.email,
+        msg: this.msg
+      }
+
+      const options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+      }
+
+      this.loading = true;
+
+      await fetch('https://express-nora.herokuapp.com/email', options)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        this.loading = false;
+        this.confirmed = res.ok;
+        this.confirmedMsg = res.msg;
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.confirmed = false;
+        this.confirmedMsg = err;
+        console.log('err: ', err)
+      });
+    },
+    userFeedback() {
+      if (this.sent) {
+        if (this.loading) {
+          return '...';
+        }
+        if (!this.loading && this.confirmed) {
+          return '✓';
+        }
+        if (!this.loading && !this.confirmed) {
+          return '✗';
+        }
+      }
+      else {
+        return 'Submit';
       }
     }
   },
@@ -323,6 +382,8 @@ export default {
         &-button {
           display: flex;
           align-items: center;
+          cursor: pointer;
+          transition: all .25s;
 
           @media (max-width: 1024px) {
             margin-top: 24px;
@@ -346,7 +407,7 @@ export default {
             padding: 24px;
             border-radius: 12px;
             background-color: #FFFFFF;
-            transition: background-color 0.25s, color 0.25s;
+            transition: all .25s;
             box-shadow: 2px 3px 3px 1px #2a3b50;
 
             @media (max-width: 1024px) {
