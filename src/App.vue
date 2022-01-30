@@ -64,7 +64,10 @@ export default {
     htmlAttrs: {
       lang: 'en',
       amp: undefined
-    }
+    },
+    meta: [
+      { name: 'description', content: 'Pregnancy and Infant Loss has a stigma. We want to ensure if you experience loss, you have help and support.' }
+    ],
   }),
   components: {
     'lottie': Lottie
